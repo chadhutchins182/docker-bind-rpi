@@ -9,14 +9,13 @@ ENV BIND_USER=bind \
 ###
 ### Install
 ###
-RUN set -x \
-    && apt-get update \
-    && apt-get install bash -y \
+RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg wget \
     && wget -qO - https://download.webmin.com/jcameron-key.asc | apt-key add - \
     && apt-get install --no-install-recommends --no-install-suggests -y  apt-transport-https \
-    && echo "deb https://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list || exit 100 \
-    && rm /etc/apt/apt.conf.d/docker-gzip-indexes \
+    && echo "deb https://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list 
+
+RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes \
     && apt-get purge apt-show-versions \ 
     && rm /var/lib/apt/lists/*lz4 \
     && apt-get -o Acquire::GzipIndexes=false update \ 

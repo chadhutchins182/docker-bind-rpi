@@ -99,7 +99,7 @@ create_bind_cache_dir() {
 first_init() {
   if [ ! -f /data/.initialized ]; then
     set_webmin_redirect_port
-    if [ "${WEBMIN_INIT_SSL_ENABLED}" == "false" ]; then
+    if [ "${WEBMIN_INIT_SSL_ENABLED}" = "false" ]; then
       disable_webmin_ssl
     fi
     if [ "${WEBMIN_INIT_REFERERS}" != "NONE" ]; then
@@ -117,14 +117,14 @@ create_bind_cache_dir
 if [[ ${1:0:1} = '-' ]]; then
   EXTRA_ARGS="$*"
   set --
-elif [[ ${1} == named || ${1} == "$(command -v named)" ]]; then
+elif [[ ${1} = named || ${1} = "$(command -v named)" ]]; then
   EXTRA_ARGS="${*:2}"
   set --
 fi
 
 # default behaviour is to launch named
 if [[ -z ${1} ]]; then
-  if [ "${WEBMIN_ENABLED}" == "true" ]; then
+  if [ "${WEBMIN_ENABLED}" = "true" ]; then
     create_webmin_data_dir
     first_init
     set_root_passwd

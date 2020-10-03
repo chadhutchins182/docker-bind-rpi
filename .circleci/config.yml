@@ -203,12 +203,12 @@ jobs:
       - checkout
       - docker-build:
           registry: docker.io,quay.io
-          image: sameersbn/bind
+          image: chadhutchins182/docker-bind-rpi
           tag: ${CIRCLE_TAG:-latest}
-          cache_from: docker.io/sameersbn/bind:latest
+          cache_from: docker.io/chadhutchins182/docker-bind-rpi:latest
       - docker-save:
-          registry: docker.io,quay.io
-          image: sameersbn/bind
+          registry: docker.io
+          image: chadhutchins182/docker-bind-rpi
           tag: ${CIRCLE_TAG:-latest}
 
   test:
@@ -221,7 +221,7 @@ jobs:
           command: docker network create testnet
       - run:
           name: Launch bind container
-          command: docker run --name bind -d --net testnet sameersbn/bind:${CIRCLE_TAG:-latest}
+          command: docker run --name bind -d --net testnet chadhutchins182/docker-bind-rpi:${CIRCLE_TAG:-latest}
       - run:
           name: Wait for bootup
           command: sleep 15
@@ -231,7 +231,7 @@ jobs:
       - run:
           name: Test image
           command: |
-              docker run --rm --net testnet sameersbn/bind:${CIRCLE_TAG:-latest} host www.google.com bind
+              docker run --rm --net testnet chadhutchins182/docker-bind-rpi:${CIRCLE_TAG:-latest} host www.google.com bind
 
   publish-dockerhub:
     executor: docker/machine
@@ -243,7 +243,7 @@ jobs:
           docker-password: DOCKER_PASSWORD
       - docker-publish:
           registry: docker.io
-          image: sameersbn/bind
+          image: chadhutchins182/docker-bind-rpi
           tag: ${CIRCLE_TAG:-latest}
 
   publish-quay:
@@ -256,7 +256,7 @@ jobs:
           docker-password: DOCKER_PASSWORD
       - docker-publish:
           registry: quay.io
-          image: sameersbn/bind
+          image: chadhutchins182/docker-bind-rpi
           tag: ${CIRCLE_TAG:-latest}
 
   release:

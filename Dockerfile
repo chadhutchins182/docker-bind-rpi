@@ -11,6 +11,7 @@ ENV BIND_USER=bind \
 ###
 RUN set -x \
     && apt-get update \
+    && apt-get install bash \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg wget \
     && wget -qO - https://download.webmin.com/jcameron-key.asc | apt-key add - \
     && apt-get install --no-install-recommends --no-install-suggests -y  apt-transport-https \

@@ -9,8 +9,6 @@ ENV BIND_USER=bind \
 
 ENV DEBIAN_FRONTEND noninteractive    # export DEBIAN_FRONTEND="noninteractive"
 
-RUN ln -sf /bin/bash /bin/sh
-
 ###
 ### Install
 ###

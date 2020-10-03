@@ -1,4 +1,5 @@
 FROM arm32v7/debian:buster
+
 LABEL maintainer="chad.hutchins@yahoo.com"
 
 ENV BIND_USER=bind \
@@ -6,13 +7,16 @@ ENV BIND_USER=bind \
     WEBMIN_VERSION=1.955 \
     DATA_DIR=/data
 
+ENV DEBIAN_FRONTEND noninteractive    # export DEBIAN_FRONTEND="noninteractive"
+
+RUN ln -sf /bin/bash /bin/sh
+
 ###
 ### Install
 ###
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg wget \
-    && wget -qO - https://download.webmin.com/jcameron-key.asc | apt-key add - \
-    && apt-get install --no-install-recommends --no-install-suggests -y  apt-transport-https \
+    && apt-get install -y gnupg \
+    && apt-key adv --fetch-keys https://download.webmin.com/jcameron-key.asc \
     && echo "deb https://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list 
 
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes \
@@ -26,7 +30,6 @@ RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes \
     dnsutils \
     webmin=${WEBMIN_VERSION}* \
     iputils-ping \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $fetchDeps \
     && rm -r /var/lib/apt/lists/* \
     && mkdir /var/log/named \
     && chown bind:bind /var/log/named \

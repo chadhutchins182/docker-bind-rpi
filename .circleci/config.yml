@@ -202,7 +202,7 @@ jobs:
     steps:
       - checkout
       - docker-build:
-          registry: docker.io,quay.io
+          registry: docker.io
           image: chadhutchins182/docker-bind-rpi
           tag: ${CIRCLE_TAG:-latest}
           cache_from: docker.io/chadhutchins182/docker-bind-rpi:latest
@@ -243,19 +243,6 @@ jobs:
           docker-password: DOCKER_PASSWORD
       - docker-publish:
           registry: docker.io
-          image: chadhutchins182/docker-bind-rpi
-          tag: ${CIRCLE_TAG:-latest}
-
-  publish-quay:
-    executor: docker/machine
-    steps:
-      - docker-load
-      - docker/check:
-          registry: quay.io
-          docker-username: DOCKER_LOGIN
-          docker-password: DOCKER_PASSWORD
-      - docker-publish:
-          registry: quay.io
           image: chadhutchins182/docker-bind-rpi
           tag: ${CIRCLE_TAG:-latest}
 
@@ -306,20 +293,10 @@ workflows:
               only: master
             tags:
               only: /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/
-      - publish-quay:
-          context: quay
-          requires:
-            - test
-          filters:
-            tags:
-              only: /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/
-            branches:
-              only: master
       - release:
           context: github
           requires:
             - publish-dockerhub
-            - publish-quay
           filters:
             tags:
               only: /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/

@@ -9,6 +9,8 @@ ENV BIND_USER=bind \
 
 ENV DEBIAN_FRONTEND noninteractive    # export DEBIAN_FRONTEND="noninteractive"
 
+ENV CGO_ENABLED=0
+
 ###
 ### Install
 ###
